@@ -1,0 +1,26 @@
+---goes into docker-compose file---
+prometheus: 
+    image: prom/prometheus:latest
+    ports:
+      - 9090:9090
+      volumes: 
+        - ./prometheus/prometheus.yml:/etc.prometheus/prometheus.yml
+        - prometheus-data:/prometheus
+      container_name: logging_prometheus
+      
+      
+---- going to go into prometheus.yml file----
+global: 
+  scrape_intervals: 15s
+  
+  
+scrape configs: 
+  - job_name: prometheus
+    static configs: 
+      targets: 
+        localhost: 9090
+  -job_name: fruit_shop2.0
+   metrics_path: /actuator/prometheus
+   static_configs: 
+   targets: 
+    -host.docker.internal:8081

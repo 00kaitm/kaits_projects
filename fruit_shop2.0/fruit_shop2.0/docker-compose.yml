@@ -1,0 +1,66 @@
+version: "3.8"
+
+services:
+  logging-demo:
+    build: .
+    ports:
+      - 8081:8080
+    environment:
+      - DB_URL=jdbc:postgresql://database-1.czstbdw5acxz.us-east-1.rds.amazonaws.com:5432/postgres
+      - DB_USER=postgres
+      - DB_PASS=Grapes123
+    container_name: logging-container
+    depends_on:
+      - postgres
+    volumes:
+      - ./logs/application.log:/logs/application.log
+
+  promtail: 
+    image: grafana/promtail:latest
+    container_name: logging-promtail
+    volumes: 
+      - ./promtail/promtail-docker-config.yml:/etc/promtail/docker-config.yaml
+      - ./logs/application.log:/var/log/application.log
+    command: "--config.file=/etc/promtail/docker-config.yaml"
+  loki:
+    image: grafana/loki:latest
+    container_name: logging-loki
+    ports:
+      - 3100:3100
+      
+  grafana:
+    image: grafana/grafana:latest
+    container_name: logging-grafana
+    volumes:
+      - grafana-data:/var/lib/grafana
+    ports:
+      - 3000:3000
+    depends_on:
+      - loki
+      
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    container_name: logging-prometheus
+
+  postgres:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=pass
+    container_name: postgres-container
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+volumes:
+  db-data:
+    driver: local
+  grafana-data:
+    driver: local
+  prometheus-data:
+    driver: local
