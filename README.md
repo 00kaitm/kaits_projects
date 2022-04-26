@@ -17,7 +17,7 @@ This Shop API is a list of fruits (items) and users that can be assigned to an i
 
 ## Features
 Users can: 
-   - See the fruits they own
+   - see fruits they own
 
 Admin users can: 
    - see all fruits
