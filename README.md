@@ -31,6 +31,7 @@ To-do list:
 
 ## Getting Started
 - Clone Repository 
+
 `git clone https://github.com/00kaitm/kaits_projects.git'`
 
 
