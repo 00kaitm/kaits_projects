@@ -1,27 +1,36 @@
-# Fruit Shop API
-
+# Item Shop API
+Online Fruit Shop Application 
 ## Project Description
-
-Here goes your awesome project description!
+This Shop API is a list of fruits (items) and users that can be assigned to an itemOwner. Different users (regular users and admin users) can login to access special features. 
 
 ## Technologies Used
-
-* Tech 1 - version 1.0
-* Tech 2 - version 2.0
-* Tech 3 - version 3.0
+- Java
+- Spring Boot 
+- Spring MVC
+- Spring Data JPA
+- PostgreSQL
+- Docker
+- Promtail
+- Loki
+- Grafana
+- Prometheus
 
 ## Features
+Users can: 
+   - See the fruits they own
 
-List of features ready and TODOs for future development
-* Awesome feature 1
-* Awesome feature 2
-* Awesome feature 3
+Admin users can: 
+   - see all fruits
+   - add new fruits
+   - update fruits
+   - delete fruits
 
 To-do list:
-* Wow improvement to be done 1
-* Wow improvement to be done 2
+- Add more user login functionality 
+- More metric monitoring 
 
 ## Getting Started
+   
    
 (include git clone command)
 (include all environment setup steps)
