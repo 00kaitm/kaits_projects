@@ -31,8 +31,9 @@ To-do list:
 
 ## Getting Started
 - Clone Repository 
-'git clone https://github.com/00kaitm/kaits_projects.git' 
-(include git clone command)
+`git clone https://github.com/00kaitm/kaits_projects.git'`
+
+
 (include all environment setup steps)
 
 > Be sure to include BOTH Windows and Unix command  
