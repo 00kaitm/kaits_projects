@@ -1,5 +1,5 @@
-# Item Shop API
-Online Fruit Shop Application 
+# Fruit Shop API
+Online Item Shop Application 
 ## Project Description
 This Shop API is a list of fruits (items) and users that can be assigned to an itemOwner. Different users (regular users and admin users) can login to access special features. 
 
