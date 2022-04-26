@@ -30,19 +30,19 @@ To-do list:
 - More metric monitoring 
 
 ## Getting Started
-- Clone Repository 
+- Clone Repository using Git Bash
 
-`git clone https://github.com/00kaitm/kaits_projects.git'`
+`git clone https://github.com/00kaitm/kaits_projects.git`
 
+## Usage 
+    As an Admin, I can view all items.
+        GET /fruit
+    As an Admin, I can add a new item.
+        POST /fruit
+    As an Admin, I can update a item.
+        PUT /fruit/{id}
+    As an Admin, I can view items by ID.
+        GET /fruit/{id}
+    As an Admin, I can delete an item.
+        DELETE /fruit/{id}
 
-(include all environment setup steps)
-
-> Be sure to include BOTH Windows and Unix command  
-> Be sure to mention if the commands only work on a specific platform (eg. AWS, GCP)
-
-- All the `code` required to get started
-- Images of what it should look like
-
-## Usage
-
-> Here, you instruct other people on how to use your project after they’ve installed it. This would also be a good place to include screenshots of your project in action.
