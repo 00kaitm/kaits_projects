@@ -5,10 +5,16 @@ This Shop API is a list of fruits (items) and users that can be assigned to an i
 
 ## Technologies Used
 - Java
+- Maven
+- Git
+- Log4J
+- JDBC
 - Spring Boot 
 - Spring MVC
 - Spring Data JPA
 - PostgreSQL
+- JUnit
+- Mockito
 - Docker
 - Promtail
 - Loki
