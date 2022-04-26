@@ -30,8 +30,8 @@ To-do list:
 - More metric monitoring 
 
 ## Getting Started
-   
-   
+- Clone Repository 
+'git clone https://github.com/00kaitm/kaits_projects.git' 
 (include git clone command)
 (include all environment setup steps)
 
