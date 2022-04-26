@@ -31,7 +31,7 @@ Admin users can:
    - update fruits
    - delete fruits
 
-To-do list:
+## To-do list:
 - Add more user login functionality 
 - More metric monitoring 
 
