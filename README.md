@@ -40,6 +40,12 @@ Admin users can:
 
 `git clone https://github.com/00kaitm/kaits_projects.git`
 
+* Create enviornment variables for your own database credentials(DB_URL,DB_USER,DB_PASS)
+* Navigate to repository on local device. Then navigate to fruit_shop2.0 folder
+> `cd fruit-shop2.0`
+* Run docker-compose.yml to package and containerize
+> `docker-compose up -d`
+
 ## Usage 
     As an Admin, I can view all items.
         GET /fruit
