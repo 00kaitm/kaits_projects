@@ -6,7 +6,6 @@ This Shop API is a list of fruits (items) and users that can be assigned to an i
 ## Technologies Used
 - Java
 - Maven
-- Git
 - Log4J
 - JDBC
 - Spring Boot 
