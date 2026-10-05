@@ -19,46 +19,36 @@ public class AuthService {
 
 	private final UserRepository ur;
 	private final PasswordEncoder encoder;
+	private final JwtService jwt;
+
 	private static final Logger LOG = LoggerFactory.getLogger(AuthService.class);
 
 
-	public AuthService(UserRepository ur, PasswordEncoder encoder) {
+	public AuthService(UserRepository ur, PasswordEncoder encoder, JwtService jwt) {
 		this.ur = ur;
 		this.encoder = encoder;
+		this.jwt = jwt;
 	}
 	public String login(String username, String password) throws AuthException {		User user = ur.findUserByUsername(username);
 		if (user == null || !encoder.matches(password, user.getPassword())) {
 			throw new AuthException();
 		}
-	 	return user.getId()+":"+user.getRole().toString();
+		return jwt.createToken(user);
 	}
 
 	public boolean verify(String token, UserRole... roles) throws AuthException, BadTokenException {
-		if(token == null) {
-			LOG.info("Invalid token. ");
-			throw new AuthException(); 
-		}
-
-		String[] splitToken = token.split(":");
-		if(splitToken.length < 2) {
-			throw new BadTokenException();
-		}
-
-//		User principal = ur.findById(Integer.valueOf(splitToken[0])).orElse(null);
-		int userId;
-		try {
-			userId = Integer.parseInt(splitToken[0]);
-		} catch (NumberFormatException e) {
-			throw new BadTokenException();
-		}
-		User principal = ur.findById(userId).orElse(null);
-
-		if(principal == null || !principal.getRole().toString().equals(splitToken[1]) || !Arrays.asList(roles).contains(principal.getRole())) {
+		if (token == null) {
 			throw new AuthException();
-		} 
-		LOG.info("token verified successfully");
+		}
+		if (token.startsWith("Bearer ")) {
+			token = token.substring(7);
+		}
+		int userId = jwt.getUserId(token);
+		User principal = ur.findById(userId).orElse(null);
+		if (principal == null || !Arrays.asList(roles).contains(principal.getRole())) {
+			throw new AuthException();
+		}
 		MDC.put("userId", principal.getId());
-		return true; 
+		return true;
 	}
-	
 }

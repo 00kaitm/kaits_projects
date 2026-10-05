@@ -61,9 +61,8 @@ public class UserController {
 		} 
 		
 		@GetMapping("/{id}")
-		public ResponseEntity<UserDTO> getById(@PathVariable("id") int id, @RequestHeader("Authorization") String token) throws UserNotFoundException, AuthException, BadTokenException {
-			MDC.put("requestId", UUID.randomUUID().toString());
-			if (!authServ.verify(token)) {
+		public ResponseEntity<UserDTO> getById(@PathVariable("id") int id, @RequestHeader(value = "Authorization", required = false) String token) throws UserNotFoundException, AuthException, BadTokenException {			MDC.put("requestId", UUID.randomUUID().toString());
+			if (!authServ.verify(token, UserRole.ADMIN, UserRole.BASIC_USER)) {
 				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 			}
 			LOG.info("user by id: " + id + "retrieved.");

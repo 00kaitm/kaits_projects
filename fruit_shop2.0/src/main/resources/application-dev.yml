@@ -12,3 +12,5 @@ spring:
   h2:
     console:
       enabled: true
+jwt:
+  secret: dev-only-secret-change-me-0123456789abcdef

@@ -8,3 +8,5 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: validate
+jwt:
+  secret: ${JWT_SECRET}
