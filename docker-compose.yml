@@ -1,0 +1,38 @@
+services:
+  postgres:
+    image: postgres:14
+    environment:
+      POSTGRES_DB: fruitshop
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d fruitshop"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build: ./fruit_shop2.0
+    ports:
+      - "8080:8080"
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/fruitshop
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+      JWT_SECRET: ${JWT_SECRET}
+      APP_SEED_DEMO_DATA: "true"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  ui:
+    build: ./fruit-shop-ui
+    ports:
+      - "5173:80"
+    depends_on:
+      - api
+
+volumes:
+  db-data:

@@ -4,9 +4,10 @@ spring:
     username: ${DB_USER}
     password: ${DB_PASS}
   jpa:
-    show-sql: true
+    show-sql: false
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: validate
+
 jwt:
   secret: ${JWT_SECRET}

@@ -10,9 +10,10 @@ import com.revature.models.User;
 import com.revature.models.UserRole;
 import com.revature.repositories.FruitRepository;
 import com.revature.repositories.UserRepository;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 @Component
-@Profile("dev")
+@ConditionalOnProperty(name = "app.seed-demo-data", havingValue = "true")
 public class DataSeeder implements CommandLineRunner {
 
     private final UserRepository users;
@@ -27,6 +28,9 @@ public class DataSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
+        if (users.count() > 0) {
+            return;
+        }
         User henry = users.save(new User(0, "henryg", encoder.encode("123"), UserRole.ADMIN));
         User kaitlyn = users.save(new User(0, "kaitlynm", encoder.encode("321"), UserRole.ADMIN));
         User fentry = users.save(new User(0, "fentrym", encoder.encode("456"), UserRole.BASIC_USER));

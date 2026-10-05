@@ -12,5 +12,11 @@ spring:
   h2:
     console:
       enabled: true
+  flyway:
+    enabled: false
+
 jwt:
   secret: dev-only-secret-change-me-0123456789abcdef
+
+app:
+  seed-demo-data: true

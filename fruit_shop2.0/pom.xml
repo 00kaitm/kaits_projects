@@ -60,15 +60,9 @@
 			<groupId>net.logstash.logback</groupId>
 			<artifactId>logstash-logback-encoder</artifactId>
 			<version>7.0.1</version>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>net.logstash.logback</groupId>
-			<artifactId>logstash-logback-encoder</artifactId>
-			<version>7.0.1</version>
-			<!-- Use runtime scope if the project does not have any compile-time usage 
-				of logstash-logback-encoder, such as usage of StructuredArguments/Markers 
-				or implementations such as JsonProvider, AppenderListener, JsonFactoryDecorator, 
+			<!-- Use runtime scope if the project does not have any compile-time usage
+				of logstash-logback-encoder, such as usage of StructuredArguments/Markers
+				or implementations such as JsonProvider, AppenderListener, JsonFactoryDecorator,
 				JsonGeneratorDecorator, etc <scope>runtime</scope> -->
 		</dependency>
 		<!-- Your project must also directly depend on either logback-classic or 
@@ -129,6 +123,10 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
 		</dependency>
 	</dependencies>
 
