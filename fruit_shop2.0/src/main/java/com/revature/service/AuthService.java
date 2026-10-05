@@ -43,8 +43,16 @@ public class AuthService {
 		if(splitToken.length < 2) {
 			throw new BadTokenException();
 		}
-		
-		User principal = ur.findById(Integer.valueOf(splitToken[0])).orElse(null);
+
+//		User principal = ur.findById(Integer.valueOf(splitToken[0])).orElse(null);
+		int userId;
+		try {
+			userId = Integer.parseInt(splitToken[0]);
+		} catch (NumberFormatException e) {
+			throw new BadTokenException();
+		}
+		User principal = ur.findById(userId).orElse(null);
+
 		if(principal == null || !principal.getRole().toString().equals(splitToken[1]) || !Arrays.asList(roles).contains(principal.getRole())) {
 			throw new AuthException();
 		} 

@@ -26,18 +26,13 @@ public class GlobalExceptionHandler {
 		LOG.warn("User not found exception was handled.", e);
 		return new ResponseEntity<>("User doesn't exist", HttpStatus.NOT_FOUND); 
 	}
-	
-	@ExceptionHandler(AuthException.class)
-	public ResponseEntity<String> handleAuthException(AuthException e){
-		LOG.warn("Authentication exception was handled.", e);
-		return new ResponseEntity<>("Not Authorized", HttpStatus.UNAUTHORIZED);  
-	}
-	
+
 	@ExceptionHandler(BadTokenException.class)
-	public ResponseEntity<String> handleBadTokenException(AuthException e){
+	public ResponseEntity<String> handleBadTokenException(BadTokenException e) {
 		LOG.warn("Bad Token exception was handled.", e);
-		return new ResponseEntity<>("Not Authorized", HttpStatus.UNAUTHORIZED);  
+		return new ResponseEntity<>("Not Authorized", HttpStatus.UNAUTHORIZED);
 	}
+
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<String> handleValidation(MethodArgumentNotValidException e) {
 		String message = e.getBindingResult().getFieldErrors().stream()
