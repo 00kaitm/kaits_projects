@@ -33,17 +33,17 @@ public class FruitService {
 		return protectFruits; 
 	}
 	public FruitDTO getFruitById(int id) throws FruitNotFoundException{
-		if(id < 1) {
-			LOG.error("No fruits exist ");
-			throw new FruitNotFoundException();
-		}
-		LOG.info("Fruit by id: " + id + " was found. ");
-		Fruit f1 = fr.getById(id);
-		return new FruitDTO(f1);
+		//Fruit f = fr.findById(id).orElseThrows(FruitNotFoundException::new);
+		Fruit f = fr.findById(id).orElseThrow(FruitNotFoundException::new);
+		LOG.info("Fruit by id: " + " was found");
+		return new FruitDTO(f);
 	}
 	
 	public FruitDTO getFruitByName(String name) throws FruitNotFoundException{
-		Fruit f1 = fr.findFruitByName(name); 
+		Fruit f1 = fr.findFruitByName(name);
+		if (f1 == null){
+			throw new FruitNotFoundException();
+		}
 		return new FruitDTO(f1); 
 	}
 	

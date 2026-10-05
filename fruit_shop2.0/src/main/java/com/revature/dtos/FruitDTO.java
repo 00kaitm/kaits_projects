@@ -23,8 +23,7 @@ public class FruitDTO {
 		this.name = fruit.getName();
 		this.description = fruit.getDescription();
 		this.price = fruit.getPrice();
-		this.hidden = new UserDTO(fruit.getShopUser());
-	}
+		this.hidden = fruit.getShopUser() == null ? null : new UserDTO(fruit.getShopUser());	}
 
 
 	public UserDTO getHidden() {
