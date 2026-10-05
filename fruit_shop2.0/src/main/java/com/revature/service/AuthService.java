@@ -13,6 +13,7 @@ import com.revature.models.User;
 import com.revature.models.UserRole;
 import com.revature.repositories.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import com.revature.dtos.LoginResponse;
 
 @Service
 public class AuthService {
@@ -28,10 +29,11 @@ public class AuthService {
 		this.encoder = encoder;
 		this.jwt = jwt;
 	}
-	public String login(String username, String password) throws AuthException {		User user = ur.findUserByUsername(username);
+	public LoginResponse login(String username, String password) throws AuthException {
+		User user = ur.findUserByUsername(username);
 		if (user == null || !encoder.matches(password, user.getPassword())) {
 			throw new AuthException();
 		}
-		return jwt.createToken(user);
+		return new LoginResponse(jwt.createToken(user), user.getId(), user.getUsername(), user.getRole().name());
 	}
 }
