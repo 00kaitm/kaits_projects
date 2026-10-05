@@ -1,4 +1,5 @@
 const API_URL = "http://localhost:8080";
+export const SESSION_KEY = "fruit-shop-session";
 
 export type Session = {
     token: string;
@@ -37,7 +38,13 @@ export async function api<T>(path: string, options: Options = {}): Promise<T> {
     const isJson = response.headers.get("content-type")?.includes("application/json");
 
     if (!response.ok) {
-        if (response.status === 401) throw new Error("Please log in again.");
+        if (response.status === 401) {
+            if (options.token) {
+                localStorage.removeItem(SESSION_KEY);
+                window.location.reload();
+            }
+            throw new Error("Please log in again.");
+        }
         if (response.status === 403) throw new Error("You don't have permission to do that.");
         throw new Error(isJson ? "Something went wrong." : text || "Something went wrong.");
     }

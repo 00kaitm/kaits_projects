@@ -32,6 +32,7 @@ export default function UsersPage({ session }: { session: Session }) {
 
     function remove(user: User) {
         if (!window.confirm(`Delete ${user.username}?`)) return;
+
         return run(() => api(`/users/${user.id}`, { method: "DELETE", token: session.token }));
     }
 
@@ -58,7 +59,7 @@ export default function UsersPage({ session }: { session: Session }) {
                                 <button disabled={isMe} onClick={() => void toggleRole(user)}>
                                     {user.role === "ADMIN" ? "Make basic user" : "Make admin"}
                                 </button>{" "}
-                                <button disabled={isMe} onClick={() => void remove(user)}>
+                                <button className="danger" disabled={isMe} onClick={() => void remove(user)}>
                                     Delete
                                 </button>
                             </td>

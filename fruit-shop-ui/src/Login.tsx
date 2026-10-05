@@ -32,7 +32,7 @@ export default function Login({ onLogin }: { onLogin: (session: Session) => void
     }
 
     return (
-        <main>
+        <main className="auth">
             <h1>Fruit Shop</h1>
             <h2>{mode === "login" ? "Log in" : "Create an account"}</h2>
             <form
