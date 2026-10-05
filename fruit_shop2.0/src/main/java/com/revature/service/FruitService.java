@@ -2,13 +2,12 @@ package com.revature.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.revature.controllers.UserController;
+import org.springframework.transaction.annotation.Transactional;
 import com.revature.dtos.FruitDTO;
+import com.revature.dtos.FruitRequest;
 import com.revature.exceptions.FruitNotFoundException;
 import com.revature.models.Fruit;
 import com.revature.repositories.FruitRepository;
@@ -16,51 +15,63 @@ import com.revature.repositories.FruitRepository;
 @Service
 public class FruitService {
 
-	@Autowired
-	private FruitRepository fr;
-	public FruitService (FruitRepository fr) {
-		super();
-		this.fr = fr; 
-	}
-	private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
+	private static final Logger LOG = LoggerFactory.getLogger(FruitService.class);
 
-	public List<FruitDTO> getAll(){
-		List<Fruit> fruits = fr.findAll();
-		List<FruitDTO> protectFruits = new ArrayList<>(); 
-		for(Fruit f : fruits) {
-				protectFruits.add(new FruitDTO(f));
-			}
-		return protectFruits; 
+	private final FruitRepository fr;
+
+	public FruitService(FruitRepository fr) {
+		this.fr = fr;
 	}
-	public FruitDTO getFruitById(int id) throws FruitNotFoundException{
-		//Fruit f = fr.findById(id).orElseThrows(FruitNotFoundException::new);
-		Fruit f = fr.findById(id).orElseThrow(FruitNotFoundException::new);
-		LOG.info("Fruit by id: " + " was found");
-		return new FruitDTO(f);
+
+	@Transactional(readOnly = true)
+	public List<FruitDTO> getAll() {
+		List<FruitDTO> fruits = new ArrayList<>();
+		for (Fruit f : fr.findAll()) {
+			fruits.add(new FruitDTO(f));
+		}
+		return fruits;
 	}
-	
-	public FruitDTO getFruitByName(String name) throws FruitNotFoundException{
-		Fruit f1 = fr.findFruitByName(name);
-		if (f1 == null){
+
+	@Transactional(readOnly = true)
+	public FruitDTO getFruitById(int id) {
+		return new FruitDTO(findOrThrow(id));
+	}
+
+	@Transactional(readOnly = true)
+	public FruitDTO getFruitByName(String name) {
+		Fruit f = fr.findFruitByName(name);
+		if (f == null) {
 			throw new FruitNotFoundException();
 		}
-		return new FruitDTO(f1); 
+		return new FruitDTO(f);
 	}
-	
+
 	@Transactional
-	public Fruit createFruit(Fruit newFruit) {
-		return fr.save(newFruit); 
+	public FruitDTO createFruit(FruitRequest request) {
+		Fruit fruit = new Fruit();
+		fruit.setName(request.getName());
+		fruit.setDescription(request.getDescription());
+		fruit.setPrice(request.getPrice());
+		Fruit saved = fr.save(fruit);
+		LOG.info("Fruit {} was created.", saved.getId());
+		return new FruitDTO(saved);
 	}
-	
+
 	@Transactional
-	public Fruit updateFruit(int id, Fruit fruit) throws FruitNotFoundException{
-		return fr.save(fruit); 
+	public FruitDTO updateFruit(int id, FruitRequest request) {
+		Fruit existing = findOrThrow(id);
+		existing.setName(request.getName());
+		existing.setDescription(request.getDescription());
+		existing.setPrice(request.getPrice());
+		return new FruitDTO(existing);
 	}
-	 
-	@Transactional 
-	public boolean deleteFruit(int id) throws FruitNotFoundException{
-		getFruitById(id); 
-		fr.deleteById(id);
-		return true; 
+
+	@Transactional
+	public void deleteFruit(int id) {
+		fr.delete(findOrThrow(id));
+	}
+
+	private Fruit findOrThrow(int id) {
+		return fr.findById(id).orElseThrow(FruitNotFoundException::new);
 	}
 }

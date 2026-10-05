@@ -22,6 +22,8 @@ import com.revature.dtos.FruitDTO;
 import com.revature.exceptions.FruitNotFoundException;
 import com.revature.models.Fruit;
 import com.revature.service.FruitService;
+import javax.validation.Valid;
+import com.revature.dtos.FruitRequest;
 
 @RestController
 @RequestMapping("/fruit")
@@ -57,21 +59,16 @@ public class FruitController {
 		fruits.add(fs.getFruitById(id));
 		return new ResponseEntity<>(fruits, HttpStatus.OK); 
 	}
-	
-	
+
+
 	@PostMapping
-	public ResponseEntity<String> createUser(@RequestBody Fruit fruit){
-		MDC.put("Fruit has been created: ", fruit.getName());
-		Fruit f = fs.createFruit(fruit);
-		LOG.info("Fruit " + f.getName() + " was created. ");
-		return new ResponseEntity<>("Fruit " + f.getName() + " has been created. ", HttpStatus.CREATED);
+	public ResponseEntity<FruitDTO> createFruit(@Valid @RequestBody FruitRequest request) {
+		return new ResponseEntity<>(fs.createFruit(request), HttpStatus.CREATED);
 	}
-	
+
 	@PutMapping("/{id}")
-	public ResponseEntity<Fruit> updateFruit(@RequestBody Fruit fruit, @PathVariable("id") int id) throws FruitNotFoundException{
-		MDC.put("Fruit has been created: ", fruit.getName());
-		LOG.info("Fruit " + fruit.getName() + " was updated. ");
-		return new ResponseEntity<>(fs.updateFruit(id, fruit), HttpStatus.CREATED);
+	public ResponseEntity<FruitDTO> updateFruit(@Valid @RequestBody FruitRequest request, @PathVariable("id") int id) {
+		return ResponseEntity.ok(fs.updateFruit(id, request));
 	}
 	
 	@DeleteMapping("/{id}")

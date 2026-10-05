@@ -1,83 +1,91 @@
 package com.revature.testing;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 import java.util.Optional;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.revature.dtos.FruitDTO;
+import com.revature.dtos.FruitRequest;
 import com.revature.exceptions.FruitNotFoundException;
 import com.revature.models.Fruit;
 import com.revature.repositories.FruitRepository;
 import com.revature.service.FruitService;
 
-
-@ExtendWith(MockitoExtension.class)
 public class FruitServiceTesting {
 
-	static FruitRepository fruitRepo; 
-	static FruitService fruitService; 
-	static List<Fruit> fruits = new ArrayList<>(); 
-	static Fruit f1; 
-	static Fruit f2;
-	static Fruit f3; 
-	
-	
-	@BeforeAll
-	public static void set() {
+	private FruitRepository fruitRepo;
+	private FruitService fruitService;
+	private Fruit f1;
+	private Fruit f2;
+
+	@BeforeEach
+	public void setUp() {
 		fruitRepo = mock(FruitRepository.class);
-		fruitService = new FruitService(fruitRepo); 
-		f1 = new Fruit(7, "Blueberries", "Frozen blue", 5, null); 
-		f2 = new Fruit(8, "Raspberries", "Wild berries", 3, null); 
-		f3 = new Fruit(9, "Pineapple", "Sweet tropical", 7, null); 
-		fruits.add(f1);
-		fruits.add(f2);
-		fruits.add(f3);
+		fruitService = new FruitService(fruitRepo);
+		f1 = new Fruit(7, "Blueberries", "Frozen blue", 5, null);
+		f2 = new Fruit(8, "Raspberries", "Wild berries", 3, null);
 	}
-	
+
 	@Test
-	public void getAllFruitsTest() {
-		when(fruitRepo.findAll()).thenReturn(fruits); 
-		assertEquals(fruits, fruitService.getAll());
+	public void getAllReturnsDtos() {
+		when(fruitRepo.findAll()).thenReturn(Arrays.asList(f1, f2));
+		assertEquals(Arrays.asList(new FruitDTO(f1), new FruitDTO(f2)), fruitService.getAll());
 	}
-	
-	@Test 
-	public void getFruitByIdTest() throws FruitNotFoundException {
-		when(fruitRepo.findById(1)).thenReturn(Optional.of(f1)); 
-		assertEquals(f1, fruitService.getFruitById(1));
-	} 
-	
+
 	@Test
-	public void getFruitByNameTest() throws FruitNotFoundException {
-		when(fruitRepo.findFruitByName("Raspberries")).thenReturn(f2); 
-		assertEquals(f2, fruitService.getFruitByName("Raspberries")); 
+	public void getByIdReturnsFruit() {
+		when(fruitRepo.findById(7)).thenReturn(Optional.of(f1));
+		assertEquals(new FruitDTO(f1), fruitService.getFruitById(7));
 	}
-	 
-	@Test 
-	public void createFruitTest() {
-		when(fruitRepo.save(f1)).thenReturn(f1); 
-		assertEquals(f1, fruitService.createFruit(f1)); 
-	}
-	
+
 	@Test
-	public void updateFruitTest() throws FruitNotFoundException {
-		when(fruitRepo.findById(1)).thenReturn(Optional.of(f1)); 
-		when(fruitRepo.save(f1)).thenReturn(f1); 
-		assertEquals(f1, fruitService.updateFruit(1, f1));
+	public void getByIdThrowsWhenMissing() {
+		when(fruitRepo.findById(99)).thenReturn(Optional.empty());
+		assertThrows(FruitNotFoundException.class, () -> fruitService.getFruitById(99));
 	}
-	
-	@Test 
-	public void deleteFruitTest() throws FruitNotFoundException {
-		when(fruitRepo.getById(1)).thenReturn(f1); 
-		assertEquals(true, fruitService.deleteFruit(1)); 
+
+	@Test
+	public void getByNameThrowsWhenMissing() {
+		when(fruitRepo.findFruitByName("Banana")).thenReturn(null);
+		assertThrows(FruitNotFoundException.class, () -> fruitService.getFruitByName("Banana"));
 	}
-	
-	
+
+	@Test
+	public void createSavesAndReturnsDto() {
+		when(fruitRepo.save(any(Fruit.class))).thenReturn(f1);
+		FruitDTO result = fruitService.createFruit(new FruitRequest("Blueberries", "Frozen blue", 5));
+		assertEquals(new FruitDTO(f1), result);
+	}
+
+	@Test
+	public void updateChangesOnlyTheTargetFruit() {
+		when(fruitRepo.findById(7)).thenReturn(Optional.of(f1));
+		FruitDTO result = fruitService.updateFruit(7, new FruitRequest("Blueberries", "Fresh", 6));
+		assertEquals(7, result.getId());
+		assertEquals("Fresh", result.getDescription());
+		assertEquals(6.0, result.getPrice());
+	}
+
+	@Test
+	public void updateThrowsWhenMissing() {
+		when(fruitRepo.findById(99)).thenReturn(Optional.empty());
+		assertThrows(FruitNotFoundException.class,
+				() -> fruitService.updateFruit(99, new FruitRequest("Ghost", "x", 1)));
+	}
+
+	@Test
+	public void deleteRemovesTheFruit() {
+		when(fruitRepo.findById(7)).thenReturn(Optional.of(f1));
+		fruitService.deleteFruit(7);
+		verify(fruitRepo).delete(f1);
+	}
 }

@@ -1,5 +1,5 @@
 package com.revature.exceptions;
 
-public class FruitNotFoundException extends Exception{
+public class FruitNotFoundException extends RuntimeException{
 
 }
