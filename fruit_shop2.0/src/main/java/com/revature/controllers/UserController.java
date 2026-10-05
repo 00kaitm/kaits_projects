@@ -32,42 +32,29 @@ import com.revature.service.UserService;
 public class UserController {
 
 		
-		private UserService us;
-		private AuthService authServ; 
-		
+		private final UserService us;
+
 		private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
 
 		
-		@Autowired
-		public UserController(UserService us, AuthService au) {
-			super();
+
+		public UserController(UserService us) {
 			this.us = us;
-			this.authServ = au; 
-		} 
-		
-		@GetMapping
-		public ResponseEntity<List<UserDTO>> getAll(@RequestHeader(value = "Authorization", required = false) String token) throws AuthException, BadTokenException{
-			MDC.put("requestId", UUID.randomUUID().toString());
-			if(!authServ.verify(token, UserRole.ADMIN, UserRole.BASIC_USER)) {
-				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-			}
-			List<User> users = us.getAll();
-			List<UserDTO> protectedUsers = new ArrayList<>();
-			for(User user : users) { 
-				protectedUsers.add(new UserDTO(user)); 
-				}
-			LOG.info("all users retrieved.");
-			return new ResponseEntity<>(protectedUsers, HttpStatus.OK);
-		} 
-		
-		@GetMapping("/{id}")
-		public ResponseEntity<UserDTO> getById(@PathVariable("id") int id, @RequestHeader(value = "Authorization", required = false) String token) throws UserNotFoundException, AuthException, BadTokenException {			MDC.put("requestId", UUID.randomUUID().toString());
-			if (!authServ.verify(token, UserRole.ADMIN, UserRole.BASIC_USER)) {
-				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-			}
-			LOG.info("user by id: " + id + "retrieved.");
-			return new ResponseEntity<>(us.getUserById(id), HttpStatus.OK);
 		}
+
+	@GetMapping
+	public ResponseEntity<List<UserDTO>> getAll() {
+		List<UserDTO> users = new ArrayList<>();
+		for (User user : us.getAll()) {
+			users.add(new UserDTO(user));
+		}
+		return ResponseEntity.ok(users);
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<UserDTO> getById(@PathVariable("id") int id) throws UserNotFoundException {
+		return ResponseEntity.ok(us.getUserById(id));
+	}
 		
 		@PostMapping
 		public ResponseEntity<String> createUser(@RequestBody User user) {
