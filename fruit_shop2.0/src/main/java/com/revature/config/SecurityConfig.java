@@ -29,6 +29,7 @@ public class SecurityConfig {
                 .antMatchers("/error", "/actuator/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/fruit/**").hasAnyRole("ADMIN", "BASIC_USER")
                 .antMatchers("/fruit/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/users").permitAll()
                 .antMatchers("/users/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()

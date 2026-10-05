@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import java.util.stream.Collectors;
+import org.springframework.dao.DataIntegrityViolationException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -44,5 +45,10 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<String> handleBadTokenException(BadTokenException e) {
 		LOG.warn("Bad Token exception was handled.", e);
 		return new ResponseEntity<>("Not Authorized", HttpStatus.UNAUTHORIZED);
+	}
+	@ExceptionHandler(DataIntegrityViolationException.class)
+	public ResponseEntity<String> handleConflict(DataIntegrityViolationException e) {
+		LOG.warn("Data conflict was handled.", e);
+		return new ResponseEntity<>("Conflicts with existing data: a duplicate name, or an item still in use", HttpStatus.CONFLICT);
 	}
 }

@@ -1,14 +1,16 @@
 package com.revature.service;
 
+import java.util.ArrayList;
 import java.util.List;
-import javax.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import com.revature.dtos.UserDTO;
+import com.revature.dtos.UserRequest;
 import com.revature.exceptions.UserNotFoundException;
 import com.revature.models.User;
+import com.revature.models.UserRole;
 import com.revature.repositories.UserRepository;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
 public class UserService {
@@ -20,35 +22,53 @@ public class UserService {
 	public UserService(UserRepository ur, PasswordEncoder encoder) {
 		this.ur = ur;
 		this.encoder = encoder;
-	} 
-	
-	public UserDTO getUserById(int id) throws UserNotFoundException{
-		User user = ur.findById(id).orElseThrow(UserNotFoundException::new);
-		return new UserDTO(user);
+	}
+
+	@Transactional(readOnly = true)
+	public List<UserDTO> getAll() {
+		List<UserDTO> users = new ArrayList<>();
+		for (User user : ur.findAll()) {
+			users.add(new UserDTO(user));
+		}
+		return users;
+	}
+
+	@Transactional(readOnly = true)
+	public UserDTO getUserById(int id) {
+		return new UserDTO(findOrThrow(id));
 	}
 
 	@Transactional
-	public User createUser(User newUser) {
-		newUser.setPassword(encoder.encode(newUser.getPassword()));
-		return ur.save(newUser);
-	}
-	
-	public List<User> getAll(){
-		return ur.findAll();
+	public UserDTO createUser(UserRequest request) {
+		User user = new User();
+		user.setUsername(request.getUsername());
+		user.setPassword(encoder.encode(request.getPassword()));
+		user.setRole(UserRole.BASIC_USER);
+		return new UserDTO(ur.save(user));
 	}
 
 	@Transactional
-	public User updateUser(int id, User user) throws UserNotFoundException {
-		User existing = ur.findById(id).orElseThrow(UserNotFoundException::new);
-		existing.setUsername(user.getUsername());
-		existing.setPassword(encoder.encode(user.getPassword()));
-		return ur.save(existing);
+	public UserDTO updateUser(int id, UserRequest request) {
+		User existing = findOrThrow(id);
+		existing.setUsername(request.getUsername());
+		existing.setPassword(encoder.encode(request.getPassword()));
+		return new UserDTO(existing);
 	}
-	
+
 	@Transactional
-	public boolean deleteUser(int id) throws UserNotFoundException{
-		getUserById(id); 
-		ur.deleteById(id);
-		return true;
+	public UserDTO updateRole(int id, UserRole role) {
+		User existing = findOrThrow(id);
+		existing.setRole(role);
+		return new UserDTO(existing);
 	}
+
+	@Transactional
+	public void deleteUser(int id) {
+		ur.delete(findOrThrow(id));
+	}
+
+	private User findOrThrow(int id) {
+		return ur.findById(id).orElseThrow(UserNotFoundException::new);
+	}
+
 }
