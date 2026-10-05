@@ -4,7 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c3b78f6d-8927-428a-95c0-cdccf4d33e20" name="Changes" comment="" />
+    <list default="true" id="c3b78f6d-8927-428a-95c0-cdccf4d33e20" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/fruit-shop-ui/src/FruitList.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fruit-shop-ui/src/Login.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fruit-shop-ui/src/UsersPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fruit-shop-ui/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/fruit-shop-ui/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fruit-shop-ui/src/api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/fruit-shop-ui/src/api.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fruit_shop2.0/src/main/java/com/revature/dtos/UserDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/fruit_shop2.0/src/main/java/com/revature/dtos/UserDTO.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -70,7 +78,7 @@
       <option name="presentableId" value="Default" />
       <updated>1791208357185</updated>
       <workItem from="1791208358616" duration="7892000" />
-      <workItem from="1791223552335" duration="4270000" />
+      <workItem from="1791223552335" duration="5286000" />
     </task>
     <servers />
   </component>

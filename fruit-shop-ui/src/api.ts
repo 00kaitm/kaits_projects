@@ -14,6 +14,11 @@ export type Fruit = {
     price: number;
     hidden: { id: number; username: string } | null;
 };
+export type User = {
+    id: number;
+    username: string;
+    role: "ADMIN" | "BASIC_USER";
+};
 
 type Options = { method?: string; body?: unknown; token?: string };
 
