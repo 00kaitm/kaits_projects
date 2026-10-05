@@ -12,25 +12,25 @@ import com.revature.exceptions.BadTokenException;
 import com.revature.models.User;
 import com.revature.models.UserRole;
 import com.revature.repositories.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
 public class AuthService {
 
-	private UserRepository ur;
+	private final UserRepository ur;
+	private final PasswordEncoder encoder;
 	private static final Logger LOG = LoggerFactory.getLogger(AuthService.class);
 
-	
-	@Autowired
-	public AuthService(UserRepository ur) {
-	 	super();
+
+	public AuthService(UserRepository ur, PasswordEncoder encoder) {
 		this.ur = ur;
-	} 
-	public String login(@RequestParam("username") String username, @RequestParam("password") String password) throws AuthException{
-		User user = ur.findUserByUsername(username);
-	 	if(user == null || !user.getPassword().equals(password)) {
-	 		throw new AuthException();
+		this.encoder = encoder;
+	}
+	public String login(String username, String password) throws AuthException {		User user = ur.findUserByUsername(username);
+		if (user == null || !encoder.matches(password, user.getPassword())) {
+			throw new AuthException();
 		}
-	 	return user.getId()+":"+user.getRole().toString();	 
+	 	return user.getId()+":"+user.getRole().toString();
 	}
 
 	public boolean verify(String token, UserRole... roles) throws AuthException, BadTokenException {

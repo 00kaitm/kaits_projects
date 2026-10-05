@@ -78,12 +78,12 @@ public class UserController {
 			return new ResponseEntity<>("User " + u.getUsername() + " has been created.", HttpStatus.CREATED);
 		}
 
-		@PutMapping("/{id}")
-		public ResponseEntity<User> updateUser(@RequestBody User user, @PathVariable("id") int id) {
-			LOG.info("user by id: " + user.getId() + " has been updated. ");
-			MDC.put("User updated by id: ", user.getId());
-			return new ResponseEntity<>(us.updateUser(id, user), HttpStatus.CREATED);
-		}
+	@PutMapping("/{id}")
+	public ResponseEntity<User> updateUser(@RequestBody User user, @PathVariable("id") int id) throws UserNotFoundException {
+		User updated = us.updateUser(id, user);
+		LOG.info("user by id: " + id + " has been updated. ");
+		return new ResponseEntity<>(updated, HttpStatus.OK);
+	}
 
 		@DeleteMapping("/{id}")
 		public ResponseEntity<String> DeleteById(@PathVariable("id") int id) throws UserNotFoundException {

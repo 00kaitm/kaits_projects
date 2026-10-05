@@ -62,8 +62,8 @@ public class User {
 	public UserRole getRole() { 
 		return role;
 	}
-	public void setUser(UserRole user) {
-		this.role = user;
+	public void setRole(UserRole role) {
+		this.role = role;
 	}
 	@Override
 	public String toString() {
