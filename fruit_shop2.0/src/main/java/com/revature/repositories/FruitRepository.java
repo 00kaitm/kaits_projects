@@ -10,6 +10,6 @@ import com.revature.models.Fruit;
 @Repository 
 public interface FruitRepository extends JpaRepository<Fruit, Integer>{
 	
-	public Fruit findFruitByName(String name); 
-
+	public Fruit findFruitByName(String name);
+	public List<Fruit> findByShopUserId(int userId);
 }

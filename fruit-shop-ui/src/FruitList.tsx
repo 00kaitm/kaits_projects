@@ -20,6 +20,7 @@ export default function FruitList({ session }: { session: Session }) {
     const [fruits, setFruits] = useState<Fruit[]>([]);
     const [error, setError] = useState("");
     const [version, setVersion] = useState(0);
+    const [mineOnly, setMineOnly] = useState(false);
 
     const [editingId, setEditingId] = useState<number | null>(null);
     const [name, setName] = useState("");
@@ -27,10 +28,10 @@ export default function FruitList({ session }: { session: Session }) {
     const [price, setPrice] = useState("");
 
     useEffect(() => {
-        api<Fruit[]>("/fruit", {token: session.token})
+        api<Fruit[]>(mineOnly ? "/fruit/mine" : "/fruit", { token: session.token })
             .then(setFruits)
             .catch((err: Error) => setError(err.message));
-    }, [session.token, version]);
+    }, [session.token, version, mineOnly]);
 
     function resetForm() {
         setEditingId(null);
@@ -44,7 +45,7 @@ export default function FruitList({ session }: { session: Session }) {
         setName(fruit.name);
         setDescription(fruit.description ?? "");
         setPrice(String(fruit.price));
-        window.scrollTo({top: 0, behavior: "smooth"});
+        window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     async function save() {
@@ -53,7 +54,7 @@ export default function FruitList({ session }: { session: Session }) {
             await api<Fruit>(editingId === null ? "/fruit" : `/fruit/${editingId}`, {
                 method: editingId === null ? "POST" : "PUT",
                 token: session.token,
-                body: {name, description, price: Number(price)},
+                body: { name, description, price: Number(price) },
             });
             resetForm();
             setVersion((v) => v + 1);
@@ -66,7 +67,7 @@ export default function FruitList({ session }: { session: Session }) {
         if (!window.confirm(`Delete ${fruit.name}?`)) return;
         setError("");
         try {
-            await api<string>(`/fruit/${fruit.id}`, {method: "DELETE", token: session.token});
+            await api<string>(`/fruit/${fruit.id}`, { method: "DELETE", token: session.token });
             setVersion((v) => v + 1);
         } catch (err) {
             setError(err instanceof Error ? err.message : "Something went wrong.");
@@ -116,13 +117,20 @@ export default function FruitList({ session }: { session: Session }) {
                 </form>
             )}
 
-            <h2>Fruits</h2>
+            <div className="row heading">
+                <h2>{mineOnly ? "My fruits" : "All fruits"}</h2>
+                <button onClick={() => setMineOnly(!mineOnly)}>
+                    {mineOnly ? "Show all fruits" : "Show my fruits"}
+                </button>
+            </div>
+            {fruits.length === 0 && <p className="muted">No fruits here yet.</p>}
+
             <ul className="grid">
                 {fruits.map((fruit) => (
                     <li key={fruit.id} className="card">
-          <span className="emoji" aria-hidden="true">
-            {emojiFor(fruit.name)}
-          </span>
+            <span className="emoji" aria-hidden="true">
+              {emojiFor(fruit.name)}
+            </span>
                         <h3>{fruit.name}</h3>
                         <p className="muted">{fruit.description}</p>
                         <p className="price">${fruit.price.toFixed(2)}</p>

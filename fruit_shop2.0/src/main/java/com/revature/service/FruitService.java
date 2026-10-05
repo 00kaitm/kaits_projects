@@ -11,6 +11,9 @@ import com.revature.dtos.FruitRequest;
 import com.revature.exceptions.FruitNotFoundException;
 import com.revature.models.Fruit;
 import com.revature.repositories.FruitRepository;
+import com.revature.models.User;
+import com.revature.repositories.UserRepository;
+import com.revature.exceptions.UserNotFoundException;
 
 @Service
 public class FruitService {
@@ -19,8 +22,20 @@ public class FruitService {
 
 	private final FruitRepository fr;
 
-	public FruitService(FruitRepository fr) {
+	private final UserRepository ur;
+
+	public FruitService(FruitRepository fr, UserRepository ur) {
 		this.fr = fr;
+		this.ur = ur;
+	}
+
+	@Transactional(readOnly = true)
+	public List<FruitDTO> getByOwner(int ownerId) {
+		List<FruitDTO> fruits = new ArrayList<>();
+		for (Fruit f : fr.findByShopUserId(ownerId)) {
+			fruits.add(new FruitDTO(f));
+		}
+		return fruits;
 	}
 
 	@Transactional(readOnly = true)
@@ -47,11 +62,13 @@ public class FruitService {
 	}
 
 	@Transactional
-	public FruitDTO createFruit(FruitRequest request) {
+	public FruitDTO createFruit(FruitRequest request, int ownerId) {
+		User owner = ur.findById(ownerId).orElseThrow(UserNotFoundException::new);
 		Fruit fruit = new Fruit();
 		fruit.setName(request.getName());
 		fruit.setDescription(request.getDescription());
 		fruit.setPrice(request.getPrice());
+		fruit.setShopUser(owner);
 		Fruit saved = fr.save(fruit);
 		LOG.info("Fruit {} was created.", saved.getId());
 		return new FruitDTO(saved);

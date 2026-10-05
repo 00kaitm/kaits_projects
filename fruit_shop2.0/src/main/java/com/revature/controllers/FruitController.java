@@ -24,6 +24,7 @@ import com.revature.models.Fruit;
 import com.revature.service.FruitService;
 import javax.validation.Valid;
 import com.revature.dtos.FruitRequest;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 @RestController
 @RequestMapping("/fruit")
@@ -60,10 +61,15 @@ public class FruitController {
 		return new ResponseEntity<>(fruits, HttpStatus.OK); 
 	}
 
+	@GetMapping("/mine")
+	public ResponseEntity<List<FruitDTO>> getMine(@AuthenticationPrincipal Integer userId) {
+		return ResponseEntity.ok(fs.getByOwner(userId));
+	}
 
 	@PostMapping
-	public ResponseEntity<FruitDTO> createFruit(@Valid @RequestBody FruitRequest request) {
-		return new ResponseEntity<>(fs.createFruit(request), HttpStatus.CREATED);
+	public ResponseEntity<FruitDTO> createFruit(@Valid @RequestBody FruitRequest request,
+	                                            @AuthenticationPrincipal Integer userId) {
+		return new ResponseEntity<>(fs.createFruit(request, userId), HttpStatus.CREATED);
 	}
 
 	@PutMapping("/{id}")
