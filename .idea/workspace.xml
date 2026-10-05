@@ -6,11 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="c3b78f6d-8927-428a-95c0-cdccf4d33e20" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fruit-shop-ui/src/FruitList.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/fruit-shop-ui/src/FruitList.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fruit_shop2.0/src/main/java/com/revature/controllers/FruitController.java" beforeDir="false" afterPath="$PROJECT_DIR$/fruit_shop2.0/src/main/java/com/revature/controllers/FruitController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fruit_shop2.0/src/main/java/com/revature/repositories/FruitRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/fruit_shop2.0/src/main/java/com/revature/repositories/FruitRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fruit_shop2.0/src/main/java/com/revature/service/FruitService.java" beforeDir="false" afterPath="$PROJECT_DIR$/fruit_shop2.0/src/main/java/com/revature/service/FruitService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fruit_shop2.0/src/test/java/com/revature/testing/FruitServiceTesting.java" beforeDir="false" afterPath="$PROJECT_DIR$/fruit_shop2.0/src/test/java/com/revature/testing/FruitServiceTesting.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,7 +72,7 @@
       <option name="presentableId" value="Default" />
       <updated>1791208357185</updated>
       <workItem from="1791208358616" duration="7892000" />
-      <workItem from="1791223552335" duration="6796000" />
+      <workItem from="1791223552335" duration="7643000" />
     </task>
     <servers />
   </component>
